@@ -1,0 +1,41 @@
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+class Product {
+    private String name;
+    private double price;
+    private int quantity;
+    private ProductType type;
+
+    public Product(String name, double price, int quantity, ProductType type) {
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public ProductType getType() {
+        return type;
+    }
+    public double getPrice(Customer customer) {
+        if (customer != null && customer.isMember()) {
+            return price * 0.95; // ลดราคา 5% สำหรับสมาชิก
+        }
+        return price; // ไม่ใช่สมาชิกหรือ customer เป็น null
+    }
+    
+
+
+    @Override
+    public String toString() {
+        return name + " (" + type + ") - Price: " + price + " Quantity: " + quantity;
+    }
+}
