@@ -1,9 +1,10 @@
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 class Cashier {
     private String name;
-    private static int billCounter = 0; // ตัวนับหมายเลขบิล
+    private PaymentProcessor paymentProcessor = new PaymentProcessor();
+    private ReceiptPrinter receiptPrinter = new ReceiptPrinter();
+
 
     public Cashier(String name) {
         this.name = name;
@@ -23,29 +24,13 @@ class Cashier {
     }
 
     public Bill processPayment(Customer customer, List<Product> products, boolean payWithWallet) {
-        double totalAmount = 0.0;
-        for (int i = 0; i < products.size(); i++) {
-            totalAmount += products.get(i).getPrice(customer); // ราคาลดสำหรับสมาชิก
+        Bill bill = paymentProcessor.processPayment(customer, products, payWithWallet);
+        if (bill != null) {
+            receiptPrinter.printReceipt(bill);
         }
-
-        if (payWithWallet) {
-            if (customer.getWallet() >= totalAmount) {
-                customer.deductFromWallet(totalAmount); // หักเงินจาก Wallet
-                System.out.println("Payment successful from Wallet!");
-            } else {
-                System.out.println("Insufficient funds in wallet.");
-                return null;
-            }
-        } else {
-            System.out.println("Payment successful with Cash!");
-        }
-
-        Bill bill = new Bill(++billCounter, products, totalAmount, new Date()); // สร้างบิลใหม่และเพิ่มหมายเลขบิล
-        customer.addBill(bill); // เพิ่มบิลเข้าไปในประวัติลูกค้า
-
-        printReceipt(bill); // เรียกใช้ฟังก์ชันการพิมพ์ใบเสร็จ
         return bill;
     }
+
 
     public void registerMembership(Customer customer, Scanner scanner) {
         System.out.print("Would you like to register for membership? (yes/no): ");
@@ -87,19 +72,19 @@ class Cashier {
     }
 
     public void printReceipt(Bill bill) {
-        String storeName = "7-Eleven";
+        String storeName = "NextMart";
         String storeAddress = "123 Main St, City, Country";
         String storePhone = "Phone: 123-456-7890";
     
         String separator = "--------------------------------------";
         String lineSeparator = "======================================";
         
+        System.out.printf("Bill Number: %-29s\n", bill.getBillNumber());
         System.out.println("\n" + lineSeparator);
         System.out.printf("%-20s %20s\n", storeName, " ");
         System.out.printf("%-20s %20s\n", storeAddress, " ");
         System.out.printf("%-20s %20s\n", storePhone, " ");
         System.out.println(lineSeparator);
-        System.out.printf("Bill Number: %-29s\n", bill.getBillNumber());
         System.out.printf("Date: %-29s\n", bill.getDate());
         System.out.println(separator);
         System.out.println("Items:");
@@ -108,8 +93,9 @@ class Cashier {
             Product product = products.get(i);
             System.out.printf("%-25s %10.2f\n", product.getName(), product.getPrice(null)); // ส่ง null เพราะไม่ต้องใช้ข้อมูล customer
         }
-        System.out.println(separator);
         System.out.printf("Total Amount: %-25.2f\n", bill.getTotalAmount());
+        System.out.println(separator);
+        System.out.printf("Member information\n");
         System.out.println(lineSeparator);
         System.out.println("Thank you for shopping at " + storeName + "!");
         System.out.println(lineSeparator);

@@ -6,6 +6,7 @@ class Customer {
     private double wallet;
     private boolean isMember;
     private String membershipId;
+    private int points;
     private List<Bill> billHistory = new ArrayList<>();
 
     public Customer(String name, double wallet) {
@@ -14,6 +15,13 @@ class Customer {
         this.isMember = false;
     }
 
+    public int getPoints() {
+        return points;
+    }
+
+    public void addPoints(int amount) {
+        points += amount;
+    }
     public void addMoney(double amount) {
         wallet += amount;
     }
@@ -29,10 +37,13 @@ class Customer {
     public double getWallet() {
         return wallet;
     }
-
+    
     public void setMembership(boolean isMember, String membershipId) {
         this.isMember = isMember;
         this.membershipId = membershipId;
+    }
+    public String getMembershipId() {
+        return membershipId;
     }
 
     public boolean isMember() {
@@ -48,7 +59,8 @@ class Customer {
     }
 
     public void viewBill(int billNumber) {
-        for (Bill bill : billHistory) {
+        for (int i = 0; i < billHistory.size(); i++) {
+            Bill bill = billHistory.get(i);
             if (bill.getBillNumber() == billNumber) {
                 System.out.println("Bill found: ");
                 bill.printBillDetails();
@@ -57,10 +69,20 @@ class Customer {
         }
         System.out.println("No bill found with number: " + billNumber);
     }
+    public void viewAllBills() {
+        if (billHistory.isEmpty()) {
+            System.out.println("No bills found.");
+        } else {
+            for (Bill bill : billHistory) {
+                System.out.println(bill);
+            }
+        }
+    }
 
     public void viewWallet(String membershipId) {
         if (this.membershipId != null && this.membershipId.equals(membershipId)) {
             System.out.println("Wallet balance for member " + membershipId + ": " + wallet);
+            System.out.println("Points: " + points);
         } else {
             System.out.println("Invalid membership ID.");
         }

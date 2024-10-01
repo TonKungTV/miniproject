@@ -43,22 +43,27 @@ class Manager {
     public void viewIncome(String period) {
         double totalIncome = 0.0;
         Date now = new Date();
+        
+        // ฟอร์แมตวันเวลา
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         SimpleDateFormat weekFormat = new SimpleDateFormat("yyyy-ww");
         SimpleDateFormat monthFormat = new SimpleDateFormat("yyyyMM");
         SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
     
+        // เก็บวันเวลาปัจจุบัน
         String currentDate = sdf.format(now);
         String currentWeek = weekFormat.format(now);
         String currentMonth = monthFormat.format(now);
         String currentYear = yearFormat.format(now);
     
+        // Loop ผ่านบิลทั้งหมด
         for (Bill bill : allBills) {
             String billDate = sdf.format(bill.getDate());
             String billWeek = weekFormat.format(bill.getDate());
             String billMonth = monthFormat.format(bill.getDate());
             String billYear = yearFormat.format(bill.getDate());
     
+            // คำนวณรายได้ตามช่วงเวลาที่เลือก
             switch (period.toLowerCase()) {
                 case "daily":
                     if (billDate.equals(currentDate)) {
@@ -88,6 +93,7 @@ class Manager {
     
         System.out.println("Total " + period + " income: " + totalIncome);
     }
+    
 
     public int getNextBillNumber() {
         return nextBillNumber++;

@@ -46,11 +46,13 @@ class Bill {
         StringBuilder sb = new StringBuilder();
         sb.append("Bill Number: ").append(billNumber).append("\n");
         sb.append("Products Purchased:\n");
-        for (Product product : products) {
+        for (int i = 0; i < products.size(); i++) {
+            Product product = products.get(i);
             sb.append("- ").append(product.getName()).append("\n");
         }
         sb.append("Total Amount: ").append(totalAmount).append("\n");
         sb.append("Date: ").append(date).append("\n");
         return sb.toString();
     }
+    
 }

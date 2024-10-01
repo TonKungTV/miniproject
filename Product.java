@@ -32,7 +32,13 @@ class Product {
         return price; // ไม่ใช่สมาชิกหรือ customer เป็น null
     }
     
-
+    public void reduceStock(int amount) {
+        if (quantity >= amount) {
+            quantity -= amount;
+        } else {
+            System.out.println("Insufficient stock for product: " + name);
+        }
+    }
 
     @Override
     public String toString() {

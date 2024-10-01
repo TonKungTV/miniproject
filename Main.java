@@ -74,121 +74,129 @@ public class Main {
         System.out.println("Thank you for using the system!");
     }
 
-    // Function to handle the Customer Role
-    private static void handleCustomerRole(List<Customer> customers, Scanner scanner) {
-        System.out.print("Enter your name: ");
-        String customerName = scanner.nextLine();
-        Customer customer = customers.stream()
-                .filter(c -> c.getName().equals(customerName))
-                .findFirst()
-                .orElseGet(() -> {
-                    Customer newCustomer = new Customer(customerName, 100.0);
-                    customers.add(newCustomer);
-                    return newCustomer;
-                });
+    // Customer role
+private static void handleCustomerRole(List<Customer> customers, Scanner scanner) {
+    System.out.print("Enter your Membership ID: ");
+    String membershipId = scanner.nextLine();
 
-        boolean customerRunning = true;
-        while (customerRunning) {
-            System.out.println("\n--- Customer Menu ---");
-            System.out.println("1. View Bill History");
-            System.out.println("2. Add Money to Wallet");
-            System.out.println("3. View Wallet Balance");
-            System.out.println("4. Exit");
-            System.out.print("Choose an option: ");
-            int customerChoice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+    Customer customer = findCustomerByMembership(customers, membershipId);
+    if (customer == null) {
+        System.out.println("Customer not found.");
+        return;
+    }
 
-            switch (customerChoice) {
-                case 1:
-                    System.out.print("Enter Bill Number to view: ");
-                    int billNumber = scanner.nextInt();
-                    scanner.nextLine(); // Consume newline
+    boolean customerRunning = true;
+    while (customerRunning) {
+        System.out.println("\n--- Customer Menu ---");
+        System.out.println("1. View Bill History");
+        System.out.println("2. Add Money to Wallet");
+        System.out.println("3. Exit");
+        System.out.print("Choose an option: ");
+        int customerChoice = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        switch (customerChoice) {
+            case 1:
+                System.out.print("Enter Bill Number or leave blank for all bills: ");
+                String input = scanner.nextLine();
+                if (input.isEmpty()) {
+                    customer.viewAllBills();
+                } else {
+                    int billNumber = Integer.parseInt(input);
                     customer.viewBill(billNumber);
-                    break;
-                case 2:
-                    System.out.print("Enter amount to add to wallet: ");
-                    double amount = scanner.nextDouble();
-                    scanner.nextLine(); // Consume newline
-                    customer.addMoney(amount);
-                    System.out.println("Money added successfully.");
-                    break;
-                case 3:
-                    System.out.print("Enter membership ID to view wallet balance: ");
-                    String membershipId = scanner.nextLine();
-                    customer.viewWallet(membershipId);
-                    break;
-                case 4:
-                    customerRunning = false;
-                    break;
-                default:
-                    System.out.println("Invalid option. Please try again.");
-            }
+                }
+                break;
+            case 2:
+                System.out.print("Enter amount to add to wallet: ");
+                double amount = scanner.nextDouble();
+                customer.addMoney(amount);
+                System.out.println("Money added successfully.");
+                break;
+            case 3:
+                customerRunning = false;
+                break;
+            default:
+                System.out.println("Invalid option. Please try again.");
         }
     }
+}
 
-    // Function to handle the Cashier Role
-    private static void handleCashierRole(Cashier cashier, Manager manager, List<Customer> customers, Scanner scanner) {
+// Cashier role
+private static void handleCashierRole(Cashier cashier, Manager manager, List<Customer> customers, Scanner scanner) {
+    
+    System.out.print("Enter Membership ID (leave blank if not a member): ");
+    String membershipId = scanner.nextLine();
+
+    Customer customer = null;
+    if (!membershipId.isEmpty()) {
+        customer = findCustomerByMembership(customers, membershipId);
+    }
+
+    if (customer == null) {
+        System.out.println("Customer not found. Proceeding as non-member.");
+        customer = new Customer("Guest", 100.0);
+        customers.add(customer);
+    }
+
+    boolean cashierRunning = true;
+    while (cashierRunning) {
         System.out.println("\n--- Cashier Menu ---");
-        cashier.displayProducts(manager.getProducts());
+        System.out.println("1. Process Payment");
+        System.out.println("2. Register Membership");
+        System.out.println("3. Exit");
+        System.out.print("Choose an option: ");
+        int cashierChoice = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
 
-        System.out.print("Enter Customer Name: ");
-        String customerName = scanner.nextLine();
-        Customer customer = customers.stream()
-                .filter(c -> c.getName().equals(customerName))
-                .findFirst()
-                .orElseGet(() -> {
-                    Customer newCustomer = new Customer(customerName, 100.0);
-                    customers.add(newCustomer);
-                    return newCustomer;
-                });
-
-        boolean cashierRunning = true;
-        while (cashierRunning) {
-            System.out.println("\n1. Process Payment");
-            System.out.println("2. Register Membership");
-            System.out.println("3. Check Membership Status");
-            System.out.println("4. Exit");
-            System.out.print("Choose an option: ");
-            int cashierChoice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
-
-            switch (cashierChoice) {
-                case 1:
-                    System.out.println("Enter Product IDs (comma separated): ");
-                    String[] productIds = scanner.nextLine().split(",");
-                    List<Product> products = new ArrayList<>();
-                    for (String productId : productIds) {
-                        int id = Integer.parseInt(productId.trim()) - 1;
-                        if (id >= 0 && id < manager.getProducts().size()) {
-                            products.add(manager.getProducts().get(id));
-                        } else {
-                            System.out.println("Invalid Product ID: " + (id + 1));
-                        }
+        switch (cashierChoice) {
+            case 1:
+                cashier.displayProducts(manager.getProducts());
+                System.out.println("Enter Product IDs (comma separated): ");
+                String[] productIds = scanner.nextLine().split(",");
+                List<Product> products = new ArrayList<>();
+                for (String productId : productIds) {
+                    int id = Integer.parseInt(productId.trim()) - 1;
+                    if (id >= 0 && id < manager.getProducts().size()) {
+                        products.add(manager.getProducts().get(id));
+                    } else {
+                        System.out.println("Invalid Product ID: " + (id + 1));
                     }
+                }
 
-                    System.out.print("Pay with Wallet? (yes/no): ");
-                    boolean payWithWallet = scanner.next().equalsIgnoreCase("yes");
-                    scanner.nextLine(); // Consume newline
+                System.out.print("Pay with Wallet? (yes/no): ");
+                boolean payWithWallet = scanner.next().equalsIgnoreCase("yes");
+                scanner.nextLine(); // Consume newline
 
-                    Bill bill = cashier.processPayment(customer, products, payWithWallet);
+                Bill bill = cashier.processPayment(customer, products, payWithWallet);
                     if (bill != null) {
-                        // Receipt will be printed in `processPayment` method
+                        System.out.println("Payment successful.");
+                        manager.addBill(bill); // เพิ่มบิลเข้าไปใน Manager's allBills
                     }
-                    break;
-                case 2:
-                    cashier.registerMembership(customer, scanner);
-                    break;
-                case 3:
-                    cashier.checkMembershipStatus(customer, scanner);
-                    break;
-                case 4:
-                    cashierRunning = false;
-                    break;
-                default:
-                    System.out.println("Invalid option. Please try again.");
-            }
+                break;
+                
+            case 2:
+                cashier.registerMembership(customer, scanner);
+                break;
+            case 3:
+                cashierRunning = false;
+                break;
+            default:
+                System.out.println("Invalid option. Please try again.");
         }
     }
+}
+
+// Helper method to find customer by membership ID
+private static Customer findCustomerByMembership(List<Customer> customers, String membershipId) {
+    for (Customer customer : customers) {
+        if (customer.getMembershipId() != null && customer.getMembershipId().equals(membershipId)) {
+            return customer;
+        }
+    }
+    return null;
+}
+
+
 
     // Function to handle the Manager Role
     private static void handleManagerRole(Manager manager, Scanner scanner) {
