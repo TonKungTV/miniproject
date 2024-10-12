@@ -1,19 +1,29 @@
 {
     "products": [
-      {
-        "name": "Soda",
-        "price": 1.99,
-        "quantity": 50,
-        "type": "DRINK",
-        "productId": "P001"
+        {
+            "name": "Chips",
+            "price": 20.0,
+            "quantity": 50,
+            "type": "SNACK"
+        },
+        {
+            "name": "Soda",
+            "price": 15.0,
+            "quantity": 30,
+            "type": "DRINK"
+        },
+        {
+          "name": "Kapao",
+          "price": 45.0,
+          "quantity": 10,
+          "type": "FOOD"
       },
-      {
-        "name": "Chips",
-        "price": 2.49,
-        "quantity": 30,
-        "type": "SNACK",
-        "productId": "P002"
-      }
+        {
+          "name": "Lays",
+          "price": 20.0,
+          "quantity": 80,
+          "type":"SNACK"
+        }
     ],
     "bills": [
       {
