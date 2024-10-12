@@ -7,6 +7,7 @@ class Customer {
     private boolean isMember;
     private String membershipId;
     private int points;
+    
     private List<Bill> billHistory = new ArrayList<>();
 
     public Customer(String name, double wallet) {
@@ -53,6 +54,9 @@ class Customer {
     public String getName() {
         return name;
     }
+    public double getWalletBalance() {
+        return wallet;
+    }
 
     public void addBill(Bill bill) {
         billHistory.add(bill);
@@ -73,11 +77,13 @@ class Customer {
         if (billHistory.isEmpty()) {
             System.out.println("No bills found.");
         } else {
-            for (Bill bill : billHistory) {
+            for (int i = 0; i < billHistory.size(); i++) {
+                Bill bill = billHistory.get(i);
                 System.out.println(bill);
             }
         }
     }
+    
 
     public void viewWallet(String membershipId) {
         if (this.membershipId != null && this.membershipId.equals(membershipId)) {

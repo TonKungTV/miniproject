@@ -1,0 +1,75 @@
+{
+    "products": [
+      {
+        "name": "Soda",
+        "price": 1.99,
+        "quantity": 50,
+        "type": "DRINK",
+        "productId": "P001"
+      },
+      {
+        "name": "Chips",
+        "price": 2.49,
+        "quantity": 30,
+        "type": "SNACK",
+        "productId": "P002"
+      }
+    ],
+    "bills": [
+      {
+        "billNumber": 1001,
+        "products": [
+          {
+            "name": "Soda",
+            "price": 1.99
+          },
+          {
+            "name": "Chips",
+            "price": 2.49
+          }
+        ],
+        "totalAmount": 4.48,
+        "date": "2024-10-01T10:00:00Z"
+      }
+    ],
+    "customers": [
+      {
+        "name": "MeMee",
+        "wallet": 9999.00,
+        "isMember": true,
+        "membershipId": "1234",
+        "points": 100,
+        "purchaseHistory": [
+          {
+            "billNumber": 1001,
+            "totalAmount": 4.48,
+            "date": "2024-10-01T10:00:00Z"
+          }
+        ]
+      }
+    ],
+    "employees": [
+      {
+        "name": "View",
+        "position": "Cashier",
+        "workShifts": [
+          {
+            "date": "2024-10-01",
+            "shift": "09:00-17:00"
+          }
+        ],
+        "employeeId": "E001"
+      }
+    ],
+    "salesReports": {
+      "dailyIncome": 500.00,
+      "bestSellingProducts": [
+        {
+          "name": "BangKarim",
+          "quantitySold": 20
+        }
+      ],
+      "customerCount": 50
+    }
+  }
+  

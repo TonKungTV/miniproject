@@ -31,7 +31,9 @@ class Product {
         }
         return price; // ไม่ใช่สมาชิกหรือ customer เป็น null
     }
-    
+    public double getPrice() {
+        return price; // คืนค่าราคา
+    }
     public void reduceStock(int amount) {
         if (quantity >= amount) {
             quantity -= amount;

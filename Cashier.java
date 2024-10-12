@@ -22,6 +22,7 @@ class Cashier {
         }
         System.out.println("----------------------");
     }
+    
 
     public Bill processPayment(Customer customer, List<Product> products, boolean payWithWallet) {
         Bill bill = paymentProcessor.processPayment(customer, products, payWithWallet);

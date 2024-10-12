@@ -3,6 +3,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+
 enum ProductType {
     SNACK, DRINK, FOOD;
 
@@ -26,6 +27,7 @@ public class Main {
         Cashier cashier = new Cashier("Alice");
         List<Customer> customers = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
+        // Gson gson = new Gson();
 
         // Adding products
         manager.addProduct(new Product("Chips", 20.0, 50, ProductType.SNACK));

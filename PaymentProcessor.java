@@ -9,7 +9,9 @@ class PaymentProcessor {
         double totalAmount = 0.0;
         int totalPoints = 0;
 
-        for (Product product : products) {
+        // ใช้ for loop แทน for-each
+        for (int i = 0; i < products.size(); i++) {
+            Product product = products.get(i);
             double productPrice = product.getPrice(customer); // ราคาลดสำหรับสมาชิก
             totalAmount += productPrice;
             

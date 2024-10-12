@@ -1,9 +1,11 @@
+import java.util.List;
+
 class ReceiptPrinter {
     public void printReceipt(Bill bill) {
         String storeName = "NextMart";
         String storeAddress = "123 Main St, City, Country";
         String storePhone = "Phone: 123-456-7890";
-    
+        
         String separator = "--------------------------------------";
         String lineSeparator = "======================================";
         
@@ -17,11 +19,22 @@ class ReceiptPrinter {
         System.out.println(separator);
         System.out.println("Items:");
         
-        for (int i = 0; i < bill.getProducts().size(); i++) {
-            Product product = bill.getProducts().get(i);
-            System.out.printf("%-25s %10.2f\n", product.getName(), product.getPrice(null)); // ส่ง null เพราะไม่ต้องใช้ข้อมูล customer
-        }
+        // ดึงรายการสินค้าที่ถูกจัดกลุ่มจาก Bill
+        List<GroupedProduct> groupedProducts = bill.groupProducts();
         
+        // ใช้ for loop เพื่อพิมพ์สินค้าพร้อมจำนวนและราคาที่คำนวณรวมแล้ว
+        for (int i = 0; i < groupedProducts.size(); i++) {
+            GroupedProduct groupedProduct = groupedProducts.get(i);
+            System.out.printf("%-10s %10d %15.2f\n", 
+                groupedProduct.getProduct().getName(),  // ชื่อสินค้า
+                groupedProduct.getQuantity(),           // จำนวนที่ซื้อ
+                groupedProduct.getTotalPrice(null)      // ราคาทั้งหมดของสินค้านั้น
+            );
+        }
+
+        // แสดงยอดรวมจำนวนสินค้าทั้งหมด
+        System.out.printf("Total Items: %-25d\n", bill.getTotalQuantity());
+        // พิมพ์ยอดรวมทั้งหมดของราคาสินค้า
         System.out.printf("Total Amount: %-25.2f\n", bill.getTotalAmount());
         System.out.println(separator);
         System.out.println("Thank you for shopping at " + storeName + "!");
