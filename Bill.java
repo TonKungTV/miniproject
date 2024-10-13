@@ -1,6 +1,11 @@
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 
 
 class Bill {
@@ -65,6 +70,32 @@ class Bill {
         return groupedProducts;
     }
 
+    @SuppressWarnings("unchecked")
+    public void saveBillToJson() {
+        JSONObject billDetails = new JSONObject();
+        billDetails.put("billNumber", billNumber);
+        billDetails.put("totalAmount", totalAmount);
+        billDetails.put("date", date.toString());
+
+        JSONArray productsArray = new JSONArray();
+        for (GroupedProduct gp : groupProducts()) {
+            JSONObject productDetails = new JSONObject();
+            productDetails.put("name", gp.getProduct().getName());
+            productDetails.put("price", gp.getProduct().getPrice());
+            productDetails.put("quantity", gp.getQuantity());
+            productsArray.add(productDetails);
+        }
+
+        billDetails.put("products", productsArray);
+
+        try (FileWriter file = new FileWriter("bill_" + billNumber + ".json")) {
+            file.write(billDetails.toJSONString());
+            file.flush();
+            System.out.println("Bill saved successfully.");
+        } catch (IOException e) {
+            System.out.println("Error saving bill: " + e.getMessage());
+        }
+    }
     public void printBillDetails() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'printBillDetails'");

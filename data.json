@@ -1,85 +1,84 @@
 {
-    "products": [
-        {
-            "name": "Chips",
-            "price": 20.0,
-            "quantity": 50,
-            "type": "SNACK"
-        },
-        {
-            "name": "Soda",
-            "price": 15.0,
-            "quantity": 30,
-            "type": "DRINK"
-        },
-        {
-          "name": "Kapao",
-          "price": 45.0,
-          "quantity": 10,
-          "type": "FOOD"
-      },
-        {
-          "name": "Lays",
+  "products": [
+      {
+          "name": "Chips",
           "price": 20.0,
-          "quantity": 80,
-          "type":"SNACK"
-        }
-    ],
-    "bills": [
+          "quantity": 50,
+          "type": "SNACK"
+      },
       {
-        "billNumber": 1001,
-        "products": [
-          {
-            "name": "Soda",
-            "price": 1.99
-          },
-          {
-            "name": "Chips",
-            "price": 2.49
-          }
-        ],
-        "totalAmount": 4.48,
-        "date": "2024-10-01T10:00:00Z"
-      }
-    ],
-    "customers": [
+          "name": "Soda",
+          "price": 15.0,
+          "quantity": 30,
+          "type": "DRINK"
+      },
       {
-        "name": "MeMee",
-        "wallet": 9999.00,
-        "isMember": true,
-        "membershipId": "1234",
-        "points": 100,
-        "purchaseHistory": [
-          {
-            "billNumber": 1001,
-            "totalAmount": 4.48,
-            "date": "2024-10-01T10:00:00Z"
-          }
-        ]
-      }
-    ],
-    "employees": [
+        "name": "Kapao",
+        "price": 45.0,
+        "quantity": 10,
+        "type": "FOOD"
+    },
       {
-        "name": "View",
-        "position": "Cashier",
-        "workShifts": [
-          {
-            "date": "2024-10-01",
-            "shift": "09:00-17:00"
-          }
-        ],
-        "employeeId": "E001"
+        "name": "Lays",
+        "price": 20.0,
+        "quantity": 80,
+        "type":"SNACK"
       }
-    ],
-    "salesReports": {
-      "dailyIncome": 500.00,
-      "bestSellingProducts": [
+  ],
+  "bills": [
+    {
+      "billNumber": 1001,
+      "products": [
         {
-          "name": "BangKarim",
-          "quantitySold": 20
+          "name": "Soda",
+          "price": 1.99
+        },
+        {
+          "name": "Chips",
+          "price": 2.49
         }
       ],
-      "customerCount": 50
+      "totalAmount": 4.48,
+      "date": "2024-10-01T10:00:00Z"
     }
+  ],
+  "customers": [
+    {
+      "name": "MeMee",
+      "wallet": 9999.00,
+      "isMember": true,
+      "membershipId": "1234",
+      "points": 100,
+      "purchaseHistory": [
+        {
+          "billNumber": 1001,
+          "totalAmount": 4.48,
+          "date": "2024-10-01T10:00:00Z"
+        } 
+      ]
+    }
+  ],
+  "employees": [
+    {
+      "name": "View",
+      "position": "Cashier",
+      "workShifts": [
+        {
+          "date": "2024-10-01",
+          "shift": "09:00-17:00"
+        }
+      ],
+      "employeeId": "E001"
+    }
+  ],
+  "salesReports": {
+    "dailyIncome": 500.00,
+    "bestSellingProducts": [
+      {
+        "name": "BangKarim",
+        "quantitySold": 20
+      }
+    ],
+    "customerCount": 50
   }
-  
+}

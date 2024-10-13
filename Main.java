@@ -124,96 +124,101 @@ public class Main {
     }
 
     // Cashier role
-private static void handleCashierRole(Cashier cashier, Manager manager, List<Customer> customers, Scanner scanner) {
-    System.out.print("Enter Membership ID (leave blank if not a member): ");
-    String membershipId = scanner.nextLine();
+    private static void handleCashierRole(Cashier cashier, Manager manager, List<Customer> customers, Scanner scanner) {
+        System.out.print("Enter Membership ID (leave blank if not a member): ");
+        String membershipId = scanner.nextLine();
 
-    Customer customer = null;
-    if (!membershipId.isEmpty()) {
-        customer = findCustomerByMembership(customers, membershipId);
-    }
+        Customer customer = null;
+        if (!membershipId.isEmpty()) {
+            customer = findCustomerByMembership(customers, membershipId);
+        }
 
-    if (customer == null) {
-        System.out.println("Customer not found. Proceeding as non-member.");
-        customer = new Customer("Guest", 100.0); // Create guest customer
-        customers.add(customer);
-    }
+        if (customer == null) {
+            System.out.println("Customer not found. Proceeding as non-member.");
+            customer = new Customer("Guest", 100.0); // Create guest customer
+            customers.add(customer);
+        }
 
-    boolean cashierRunning = true;
-    while (cashierRunning) {
-        System.out.println("\n--- Cashier Menu ---");
-        System.out.println("1. Process Payment");
-        System.out.println("2. Register Membership");
-        System.out.println("3. Exit");
-        System.out.print("Choose an option: ");
-        int cashierChoice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        boolean cashierRunning = true;
+        while (cashierRunning) {
+            System.out.println("\n--- Cashier Menu ---");
+            System.out.println("1. Process Payment");
+            System.out.println("2. Register Membership");
+            System.out.println("3. Exit");
+            System.out.print("Choose an option: ");
+            int cashierChoice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
 
-        switch (cashierChoice) {
-            case 1:
-                cashier.displayProducts(manager.getProducts());
-                
-                List<Product> products = new ArrayList<>();
-                boolean selectingProducts = true;
+            switch (cashierChoice) {
+                case 1:
+                    cashier.displayProducts(manager.getProducts());
 
-                while (selectingProducts) {
-                    System.out.print("Enter Product ID (or 'done' to finish): ");
-                    String input = scanner.nextLine();
-                    
-                    if (input.equalsIgnoreCase("done")) {
-                        selectingProducts = false;
-                        continue; // Exit product selection loop
-                    }
+                    List<Product> products = new ArrayList<>();
+                    boolean selectingProducts = true;
 
-                    try {
-                        int productId = Integer.parseInt(input.trim()) - 1; // Convert input to zero-based index
-                        if (productId >= 0 && productId < manager.getProducts().size()) {
-                            Product selectedProduct = manager.getProducts().get(productId);
+                    while (selectingProducts) {
+                        System.out.print("Enter Product ID (or 'done' to finish): ");
+                        String input = scanner.nextLine();
 
-                            System.out.print("Enter quantity for " + selectedProduct.getName() + ": ");
-                            int quantity = scanner.nextInt();
-                            scanner.nextLine(); // Consume newline
-
-                            // Validate quantity
-                            if (quantity > 0 && quantity <= selectedProduct.getQuantity()) {
-                                // Create copies of the product for the specified quantity
-                                for (int i = 0; i < quantity; i++) {
-                                    products.add(selectedProduct);
-                                }
-                                System.out.println(quantity + " of " + selectedProduct.getName() + " added to cart.");
-                            } else {
-                                System.out.println("Invalid quantity. Please enter a quantity between 1 and " + selectedProduct.getQuantity());
-                            }
-                        } else {
-                            System.out.println("Invalid Product ID: " + (productId + 1));
+                        if (input.equalsIgnoreCase("done")) {
+                            selectingProducts = false;
+                            continue; // Exit product selection loop
                         }
-                    } catch (NumberFormatException e) {
-                        System.out.println("Please enter a valid Product ID or 'done' to finish.");
+
+                        try {
+                            int productId = Integer.parseInt(input.trim()) - 1; // Convert input to zero-based index
+                            if (productId >= 0 && productId < manager.getProducts().size()) {
+                                Product selectedProduct = manager.getProducts().get(productId);
+
+                                System.out.print("Enter quantity for " + selectedProduct.getName() + ": ");
+                                int quantity = scanner.nextInt();
+                                scanner.nextLine(); // Consume newline
+
+                                // Validate quantity
+                                if (quantity > 0 && quantity <= selectedProduct.getQuantity()) {
+                                    // Create copies of the product for the specified quantity
+                                    for (int i = 0; i < quantity; i++) {
+                                        products.add(selectedProduct);
+                                    }
+                                    System.out
+                                            .println(quantity + " of " + selectedProduct.getName() + " added to cart.");
+                                } else {
+                                    System.out.println("Invalid quantity. Please enter a quantity between 1 and "
+                                            + selectedProduct.getQuantity());
+                                }
+                            } else {
+                                System.out.println("Invalid Product ID: " + (productId + 1));
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Please enter a valid Product ID or 'done' to finish.");
+                        }
                     }
-                }
 
-                System.out.print("Pay with Wallet? (yes/no): ");
-                boolean payWithWallet = scanner.next().equalsIgnoreCase("yes");
-                scanner.nextLine(); // Consume newline
+                    System.out.print("Pay with Wallet? (yes/no): ");
+                    boolean payWithWallet = scanner.next().equalsIgnoreCase("yes");
+                    scanner.nextLine(); // Consume newline
 
-                Bill bill = cashier.processPayment(customer, products, payWithWallet);
-                if (bill != null) {
-                    System.out.println("Payment successful.");
-                    manager.addBill(bill); // Add bill to Manager's allBills
-                }
-                break;
+                    // After processing the payment in handleCashierRole
+                    Bill bill = cashier.processPayment(customer, products, payWithWallet);
+                    if (bill != null) {
+                        System.out.println("Payment successful.");
+                        manager.addBill(bill); // Add bill to Manager's allBills
+                        bill.saveBillToJson(); // Save the bill to a JSON file
+                    }
 
-            case 2:
-                cashier.registerMembership(customer, scanner);
-                break;
-            case 3:
-                cashierRunning = false;
-                break;
-            default:
-                System.out.println("Invalid option. Please try again.");
+                    break;
+
+                case 2:
+                    cashier.registerMembership(customer, scanner);
+                    break;
+                case 3:
+                    cashierRunning = false;
+                    break;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+            }
         }
     }
-}
 
     // Helper method to find customer by membership ID
     private static Customer findCustomerByMembership(List<Customer> customers, String membershipId) {
